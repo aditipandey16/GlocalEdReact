@@ -1,6 +1,9 @@
 import { Box, IconButton, Link, Menu, MenuItem, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import AppBar from '@mui/material/AppBar';
+import Container from '@mui/material/Container';
+import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
@@ -75,116 +78,119 @@ const Navbar = () => {
     };
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "10px 20px",
-            }}
-        >
-            {/* Logo */}
-            <Typography variant="h6" component="div" sx={{ display: { xs: "block", lg: "none" } }}>
-            <img src="" alt="GlocalEd" style={{ height: 40 }} />
-            </Typography>
+        <AppBar sx={{ bgcolor: "white" }} position="static">
+            <Toolbar>
+                <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+                    <a href="#" style={{ textDecoration: 'none', color: 'inherit' }} >
+                        <img src='/glocaled_logo.png' alt="Logo" height="50"/>
+                    </a>
+                </Box>
 
-            {/* Buttons for small screens */}
-            <Box sx={{ display: { xs: "block", lg: "none" } }}>
-                <IconButton
-                    aria-label="menu"
-                    color="inherit"
-                    onClick={handleMenuOpen}
-                    sx={{ mr: 1 }}
+                <Box sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "10px 20px",
+                    }}
                 >
-                    <MenuIcon />
-                </IconButton>
+                </Box>
+                <Box sx={{ display: { xs: "block", lg: "none" } }}>
+                    <IconButton
+                        aria-label="menu"
+                        color="inherit"
+                        onClick={handleMenuOpen}
+                        sx={{ mr: 1 }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <IconButton
+                        aria-label="call"
+                        color="inherit"
+                        onClick={handleContactOpen}
+                    >
+                        <CallIcon />
+                    </IconButton>
+                </Box>
+
+                {/* Navigation Links */}
+                <Box
+                    sx={{
+                        display: { xs: "none", lg: "flex" },
+                        justifyContent: "center",
+                        flex: "1", // Fill remaining space
+                    }}
+                >
+                    {NavLinks.map((link, index) => (
+                        <Link
+                            key={index}
+                            component={RouterLink}
+                            to={link.link}
+                            underline="none"
+                            color={pathname === link.link ? "primary" : "text.primary"}
+                            sx={{ mx: 2, fontWeight: pathname === link.link ? "bold" : "normal" }}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                </Box>
+
+                {/* Contact Button for large screens */}
                 <IconButton
-                    aria-label="call"
+                    aria-label="contact"
                     color="inherit"
                     onClick={handleContactOpen}
+                    sx={{ display: { xs: "none", lg: "block" } }}
                 >
                     <CallIcon />
                 </IconButton>
-            </Box>
 
-            {/* Navigation Links */}
-            <Box
-                sx={{
-                    display: { xs: "none", lg: "flex" },
-                    justifyContent: "center",
-                    flex: "1", // Fill remaining space
-                }}
-            >
-                {NavLinks.map((link, index) => (
-                    <Link
-                        key={index}
-                        component={RouterLink}
-                        to={link.link}
-                        underline="none"
-                        color={pathname === link.link ? "primary" : "text.primary"}
-                        sx={{ mx: 2, fontWeight: pathname === link.link ? "bold" : "normal" }}
-                    >
-                        {link.name}
-                    </Link>
-                ))}
-            </Box>
+                {/* Contact Details Menu */}
+                <Menu
+                    anchorEl={anchorEl}
+                    open={menuOpen}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    {NavLinks.map((link, index) => (
+                        <MenuItem key={index} onClick={handleClose} component={RouterLink} to={link.link}>
+                            {link.name}
+                        </MenuItem>
+                    ))}
+                </Menu>
 
-            {/* Contact Button for large screens */}
-            <IconButton
-                aria-label="contact"
-                color="inherit"
-                onClick={handleContactOpen}
-                sx={{ display: { xs: "none", lg: "block" } }}
-            >
-                <CallIcon />
-            </IconButton>
-
-            {/* Contact Details Menu */}
-            <Menu
-                anchorEl={anchorEl}
-                open={menuOpen}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-            >
-                {NavLinks.map((link, index) => (
-                    <MenuItem key={index} onClick={handleClose} component={RouterLink} to={link.link}>
-                        {link.name}
+                {/* Contact Details Menu */}
+                <Menu
+                    anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                    }}
+                    anchorEl={contactOpen ? document.body : null}
+                    open={contactOpen}
+                    onClose={handleClose}
+                >
+                    <MenuItem onClick={handleEmailClick}>
+                        <EmailIcon sx={{ mr: 1 }} /> Email
                     </MenuItem>
-                ))}
-            </Menu>
-
-            {/* Contact Details Menu */}
-            <Menu
-                anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
-                anchorEl={contactOpen ? document.body : null}
-                open={contactOpen}
-                onClose={handleClose}
-            >
-                <MenuItem onClick={handleEmailClick}>
-                    <EmailIcon sx={{ mr: 1 }} /> Email
-                </MenuItem>
-                <MenuItem onClick={handlePhoneClick}>
-                    <PhoneIcon sx={{ mr: 1 }} /> Phone
-                </MenuItem>
-                <MenuItem onClick={handleInstagramClick}>
-                    <InstagramIcon sx={{ mr: 1 }} /> Instagram
-                </MenuItem>
-            </Menu>
-        </Box>
+                    <MenuItem onClick={handlePhoneClick}>
+                        <PhoneIcon sx={{ mr: 1 }} /> Phone
+                    </MenuItem>
+                    <MenuItem onClick={handleInstagramClick}>
+                        <InstagramIcon sx={{ mr: 1 }} /> Instagram
+                    </MenuItem>
+                </Menu>
+            </Toolbar>
+        </AppBar>
     );
 };
 
